@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue';
-import { getWordList } from './rest';
+import { getWordList, updateWordList } from './rest';
 import Word from './component/Word.vue'
 import WordCard from './component/WordCard.vue'
 import { FORGOTTEN_WORDS, MARK_WORDS } from './constants';
@@ -77,13 +77,20 @@ const onNext = () => {
   currIndex.value = (currIndex.value + 1) % originalWordList.value.length
 }
 
+const onUpdate = async () => {
+  await updateWordList();
+  getWordList().then(list => {
+    originalWordList.value = list;
+    interWordList.value = list;
+  })
+}
+
 const currentWord = computed(() => {
   return originalWordList.value[currIndex.value]
 })
 
 onMounted(() => {
   getWordList().then(list => {
-    console.log(list);
     originalWordList.value = list;
     interWordList.value = list;
   })
@@ -99,7 +106,8 @@ onMounted(() => {
       <button @click="onShuffle">shuffle</button>
       <button @click="onSort">asc</button>
       <button @click="onMark">mark</button>
-      <button @click="onForgotten">lost</button>
+      <button @click="onForgotten">Not Remember</button>
+      <button @click="onUpdate">update wordlist</button>
     </template>
     <button @click="onModeSwitch">switch</button>
   </div>
