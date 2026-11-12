@@ -49,7 +49,7 @@ const onMark = () => {
   interWordList.value = Object.keys(markedWordDict).map(wordId => {
     return originalWordList.value.find(word => word.itemId === wordId);
   })
-  
+
 }
 
 const onForgotten = () => {
@@ -83,6 +83,7 @@ const currentWord = computed(() => {
 
 onMounted(() => {
   getWordList().then(list => {
+    console.log(list);
     originalWordList.value = list;
     interWordList.value = list;
   })
